@@ -10,13 +10,13 @@ os.makedirs(share_dir, exist_ok=True)
 DATABASE_URL = f'sqlite:///{db_path}'
 
 # Create a new SQLite database (or connect to an existing one)
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(DATABASE_URL, echo=False)
 
 # Base class for declarative class definitions
 Base = declarative_base()
 
 # Create a configured "Session" class
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine, autoflush=True)
 
 # Create a session
 session = Session()

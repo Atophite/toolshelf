@@ -1,9 +1,9 @@
 # toolshelf/toolshelf_runner.py
 
-from toolshelf.main import main
+from toolshelf.main import ToolShelfApp
 
 def run_toolshelf():
-    main()
+    ToolShelfApp()
 
 if __name__ == '__main__':
     run_toolshelf()
