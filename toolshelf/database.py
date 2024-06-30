@@ -1,12 +1,12 @@
 
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
-config_dir = os.path.expanduser('~/.config/toolshelf')
-db_path = os.path.join(config_dir, 'toolshelf.db')
-os.makedirs(config_dir, exist_ok=True)
+share_dir = os.path.expanduser('~/.local/share/toolshelf')
+db_path = os.path.join(share_dir, 'toolshelf.db')
+os.makedirs(share_dir, exist_ok=True)
 DATABASE_URL = f'sqlite:///{db_path}'
 
 # Create a new SQLite database (or connect to an existing one)
