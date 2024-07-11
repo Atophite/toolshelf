@@ -6,6 +6,7 @@ from toolshelf.models.tool_item import ToolItem
 from textual.reactive import reactive
 from rich.table import Table
 from toolshelf.widgets import ToolDescLabelWidget
+from toolshelf.managers.tool_manager import ToolManager as tm
 
 
 
@@ -20,7 +21,7 @@ class ToolDescriptionScreen(Widget):
 
     def compose(self):
         yield Label("name:", classes="tooltype")
-        yield Label("\n", id='name', classes="tooldescription")
+        yield Label("", id='name', classes="tooldescription")
 
         yield Label("description:", classes="tooltype")
         yield Label("", id="description", classes="tooldescription")
@@ -38,7 +39,7 @@ class ToolDescriptionScreen(Widget):
         self.get_widget_by_id(id='description').update(self.toolItem.description)
         self.get_widget_by_id(id="command").update(self.toolItem.command)
 
-        if(self.toolItem.installed):
+        if(tm.get_installed(toolItem)):
             self.get_widget_by_id(id='installed').update(str("✅"))
         else:
             self.get_widget_by_id(id='installed').update(str("❌"))

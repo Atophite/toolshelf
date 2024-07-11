@@ -13,7 +13,7 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
-    install_requires=["textual", "rich", "sqlalchemy"], 
+    install_requires=["textual", "rich", "sqlalchemy", "pyperclip"], 
     include_package_data=True,
     package_data={
         "toolshelf": ["styling/*.tcss"],

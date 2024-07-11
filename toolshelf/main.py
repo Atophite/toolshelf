@@ -10,8 +10,9 @@ from textual import events
 from rich.table import Table
 from toolshelf.database import session
 from toolshelf.screens import ToolScreenModal, ToolDescriptionScreen
-from toolshelf.models.tool_item import get_tool, get_tools, add_tool, delete_tool, get_tool_color
+from toolshelf.managers.tool_manager import ToolManager as tm
 
+import pyperclip
 import logging
 import subprocess
 
@@ -28,7 +29,7 @@ class ToolShelfApp(App):
 
     selected_option: Option
 
-    option_list = OptionList(*[Option(get_tool_color(tool), id=tool.id) for tool in get_tools()], id="sidebar")
+    option_list = OptionList(*[Option(tm.get_tool_color(tool), id=tool.id) for tool in tm.get_tools()], id="sidebar")
 
     SCREENS = {
         "toolModal": lambda: ToolScreenModal(id="modal")
@@ -42,47 +43,42 @@ class ToolShelfApp(App):
     ]
 
     BINDINGS = [
-        Binding(key="q", action="quit", description="Quit the app"),
+        Binding(key="q", action="quit", description="Quit the app", priority=True),
         Binding(key="c", action="create", description="Create new"),
         Binding(key="delete", action="delete", description="Delete tool"),
-        Binding(
-            key="question_mark",
-            action="help",
-            description="Show help screen",
-            key_display="?",
-        ),
-        Binding("enter", "select_cursor", "Select", show=True),
-        Binding("up", "cursor_up", "Cursor Up", show=True),
-        Binding("down", "cursor_down", "Cursor Down", show=True),
+        Binding(key="p", action="copy", description="copy the command")
     ]
 
     def create_tool(self, tool: ToolItem):
-        add_tool(tool)
-        self.option_list.add_option(Option(get_tool_color(tool), id=tool.id))
+        tm.add_tool(tool)
+        self.option_list.add_option(Option(tm.get_tool_color(tool), id=tool.id))
         
 
     def action_create(self):
         self.push_screen("toolModal", self.create_tool)
 
     def action_delete(self):
-        delete_tool(toolItemId=self.selected_option.option_id)
+        tm.delete_tool(toolItemId=self.selected_option.option_id)
         self.option_list.remove_option(option_id=self.selected_option.option_id)
 
+    def action_copy(self):
+        toolItem: ToolItem = tm.get_tool(self.selected_option.option_id)
+        pyperclip.copy(toolItem.command)
 
     def compose(self) -> ComposeResult:
         yield self.option_list
         yield ToolDescriptionScreen()
-        yield Footer(Label("sdf"))
+        yield Footer()
 
     def on_option_list_option_highlighted(self, option):
         self.selected_option = option
         self.log(self.query_one(ToolDescriptionScreen).toolItem)
-        self.query_one(ToolDescriptionScreen).toolItem = get_tool(option.option_id)
+        self.query_one(ToolDescriptionScreen).toolItem = tm.get_tool(option.option_id)
         
     def on_option_list_option_selected(self, option):
         # option = OptionSelected
         with self.suspend():
-            tool: ToolItem = get_tool(option.option_id)
+            tool: ToolItem = tm.get_tool(option.option_id)
             self.log(tool.name)  
             subprocess.call([tool.command])
             self.app.exit()
