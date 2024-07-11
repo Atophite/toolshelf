@@ -1,0 +1,1 @@
+from .tool_description_desc_widget import ToolDescLabelWidget

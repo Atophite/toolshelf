@@ -18,7 +18,7 @@ class ToolScreenModal(ModalScreen[ToolItem]):
 
     INPUTS: list[Input] = [
         Input(placeholder="Tool name", max_length=15, id="name"),
-        Input(placeholder="Description", max_length=50, id="description"),
+        Input(placeholder="Description", max_length=100, id="description"),
         Input(placeholder="Command", max_length=50, id="command")
     ]
 
@@ -32,7 +32,7 @@ class ToolScreenModal(ModalScreen[ToolItem]):
         self.dismiss()
 
     def action_create(self):
-        tool = ToolItem(self.INPUTS[0].value, self.INPUTS[1].value, self.INPUTS[2].value, True)
+        tool = ToolItem(self.INPUTS[0].value, self.INPUTS[1].value, self.INPUTS[2].value, False)
         # add_tool(tool)
         # option_list.add_option(Option(tool.name))
         self.reset_state()

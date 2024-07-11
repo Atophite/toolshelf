@@ -1,0 +1,7 @@
+.tooltype {
+    text-opacity: 50%;
+}
+
+.tooldescription {
+    margin: 0 0 1 0
+}

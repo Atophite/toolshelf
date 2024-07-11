@@ -9,8 +9,8 @@ from textual.logging import TextualHandler
 from textual import events
 from rich.table import Table
 from toolshelf.database import session
-from toolshelf.screens.create_tool_modal import ToolScreenModal
-from toolshelf.models.tool_item import get_tool, get_tools, add_tool, delete_tool
+from toolshelf.screens import ToolScreenModal, ToolDescriptionScreen
+from toolshelf.models.tool_item import get_tool, get_tools, add_tool, delete_tool, get_tool_color
 
 import logging
 import subprocess
@@ -24,13 +24,11 @@ logging.basicConfig(
 
 
 
-
-
 class ToolShelfApp(App):
 
     selected_option: Option
 
-    option_list = OptionList(*[Option(tool.name, id=tool.id) for tool in get_tools()], id="sidebar")
+    option_list = OptionList(*[Option(get_tool_color(tool), id=tool.id) for tool in get_tools()], id="sidebar")
 
     SCREENS = {
         "toolModal": lambda: ToolScreenModal(id="modal")
@@ -39,7 +37,8 @@ class ToolShelfApp(App):
     
     CSS_PATH = [
         "styling/dock_sidebar.tcss",
-        "styling/create_tool_modal.tcss"
+        "styling/create_tool_modal.tcss",
+        "styling/tool_description.tcss"
     ]
 
     BINDINGS = [
@@ -59,29 +58,26 @@ class ToolShelfApp(App):
 
     def create_tool(self, tool: ToolItem):
         add_tool(tool)
-        self.option_list.add_option(Option(tool.name, id=tool.id))
+        self.option_list.add_option(Option(get_tool_color(tool), id=tool.id))
         
 
     def action_create(self):
         self.push_screen("toolModal", self.create_tool)
 
     def action_delete(self):
-        try:
-            delete_tool(toolItemId=self.selected_option.option_id)
-            self.option_list.remove_option(option_id=self.selected_option_option_id)
-        except:
-            None
+        delete_tool(toolItemId=self.selected_option.option_id)
+        self.option_list.remove_option(option_id=self.selected_option.option_id)
 
-
-    def on_load(self):
-        self.log("sdfsfd")
 
     def compose(self) -> ComposeResult:
         yield self.option_list
+        yield ToolDescriptionScreen()
         yield Footer(Label("sdf"))
 
     def on_option_list_option_highlighted(self, option):
         self.selected_option = option
+        self.log(self.query_one(ToolDescriptionScreen).toolItem)
+        self.query_one(ToolDescriptionScreen).toolItem = get_tool(option.option_id)
         
     def on_option_list_option_selected(self, option):
         # option = OptionSelected
@@ -89,6 +85,7 @@ class ToolShelfApp(App):
             tool: ToolItem = get_tool(option.option_id)
             self.log(tool.name)  
             subprocess.call([tool.command])
+            self.app.exit()
     
 
 

@@ -1,1 +1,1 @@
-textual run --dev toolshelf/main.py
+textual run --dev toolshelf.main
