@@ -9,7 +9,7 @@ from textual.logging import TextualHandler
 from textual import events
 from rich.table import Table
 from toolshelf.database import session
-from toolshelf.screens import ToolScreenModal, ToolDescriptionScreen
+from toolshelf.screens import ToolScreenModal, ToolDescriptionScreen, ConfirmScreenModal
 from toolshelf.managers.tool_manager import ToolManager as tm
 
 import pyperclip
@@ -32,7 +32,8 @@ class ToolShelfApp(App):
     option_list = OptionList(*[Option(tm.get_tool_color(tool), id=tool.id) for tool in tm.get_tools()], id="sidebar")
 
     SCREENS = {
-        "toolModal": lambda: ToolScreenModal(id="modal")
+        "toolModal": lambda: ToolScreenModal(classes="modal"),
+        "confirmModal": lambda: ConfirmScreenModal(classes="modal")
     }
 
     
@@ -58,8 +59,9 @@ class ToolShelfApp(App):
         self.push_screen("toolModal", self.create_tool)
 
     def action_delete(self):
-        tm.delete_tool(toolItemId=self.selected_option.option_id)
-        self.option_list.remove_option(option_id=self.selected_option.option_id)
+        self.push_screen("confirmModal")
+        # tm.delete_tool(toolItemId=self.selected_option.option_id)
+        # self.option_list.remove_option(option_id=self.selected_option.option_id)
 
     def action_copy(self):
         toolItem: ToolItem = tm.get_tool(self.selected_option.option_id)

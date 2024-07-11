@@ -1,4 +1,4 @@
-#modal {
+.modal {
     align: center middle;
 }
 
@@ -7,7 +7,7 @@ Input {
 }
 
 #dialog {
-
+    
     grid-rows: 4;
     width: 55;
     height: 20;
