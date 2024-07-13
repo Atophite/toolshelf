@@ -42,19 +42,8 @@ class EditToolScreenModal(ModalScreen[ToolItem]):
 
     def action_edit(self):
         tool = ToolItem(self.INPUTS[0].value, self.INPUTS[1].value, self.INPUTS[2].value)
-        # add_tool(tool)
-        # option_list.add_option(Option(tool.name))
-        self.dismiss(tool)
 
-    # def action_cursor_down(self):
-    #     if(self.cursor <= len(self.INPUTS)):
-    #         self.cursor += 1
-    #         self.INPUTS[self.cursor].focus()
-    
-    # def action_cursor_up(self):
-    #     if(self.cursor >= 0):
-    #         self.cursor -= 1
-    #         self.INPUTS[self.cursor].focus()
+        self.dismiss(tool)
         
 
     def compose(self):

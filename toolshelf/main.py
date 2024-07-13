@@ -3,11 +3,11 @@ from textual.widgets.option_list import Option
 from textual.widgets import *
 from textual.screen import Screen, ModalScreen
 from textual.containers import Grid
-from toolshelf.models.tool_item import ToolItem
 from textual.binding import Binding
 from textual.logging import TextualHandler
 from textual import events
 from rich.table import Table
+from toolshelf.models.tool_item import ToolItem
 from toolshelf.database import session
 from toolshelf.screens import ToolScreenModal, ToolDescriptionScreen, ConfirmScreenModal, EditToolScreenModal
 from toolshelf.managers.tool_manager import ToolManager as tm
@@ -16,14 +16,10 @@ import pyperclip
 import logging
 import subprocess
 
-
-
 logging.basicConfig(
     level="ERROR",
     handlers=[TextualHandler()],
 )
-
-
 
 class ToolShelfApp(App):
 
@@ -49,7 +45,7 @@ class ToolShelfApp(App):
         Binding(key="delete", action="delete", description="Delete"),
         Binding(key="p", action="copy", description="Copy"),
         Binding(key="e", action="edit", description="Edit"),
-        Binding(key="l", action="focus", description="Change panel")
+        Binding(key="l", action="focus", description="Change panel"),
     ]
 
     #----------------------ACTIONS-------------------------------------------
@@ -114,10 +110,6 @@ class ToolShelfApp(App):
         yield ToolDescriptionScreen(id="description")
         yield Footer()
     
-
-
-
-
 app = ToolShelfApp().run()
 
 # if __name__ == "__main__":

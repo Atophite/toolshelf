@@ -30,14 +30,12 @@ class ConfirmScreenModal(ModalScreen[bool]):
 
     def compose(self):
         yield Grid(
-                Label("Are you sure you wanna do this?", id="question"),
+                Label("Are you sure you want to delete?", id="question"),
                 Grid(
                 Button("yes", variant="success", id="yes"),
                 Button("no", variant="error", id="no"),
-                classes="button-grid"
+                    classes="button-grid"
                 ),
-
                 id="dialog",
-                
             )
         yield Footer()
