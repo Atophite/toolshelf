@@ -9,7 +9,7 @@ from textual.logging import TextualHandler
 from textual import events
 from rich.table import Table
 from toolshelf.database import session
-from toolshelf.screens import ToolScreenModal, ToolDescriptionScreen, ConfirmScreenModal
+from toolshelf.screens import ToolScreenModal, ToolDescriptionScreen, ConfirmScreenModal, EditToolScreenModal
 from toolshelf.managers.tool_manager import ToolManager as tm
 
 import pyperclip
@@ -27,12 +27,13 @@ logging.basicConfig(
 
 class ToolShelfApp(App):
 
-    selected_option: Option
+    selected_option: Option = None
 
     option_list = OptionList(*[Option(tm.get_tool_color(tool), id=tool.id) for tool in tm.get_tools()], id="sidebar")
 
     SCREENS = {
         "toolModal": lambda: ToolScreenModal(classes="modal"),
+        "editToolModal": lambda: EditToolScreenModal(tool=tm.get_tool(selected_option)),
         "confirmModal": lambda: ConfirmScreenModal(classes="modal")
     }
 
@@ -47,21 +48,32 @@ class ToolShelfApp(App):
         Binding(key="q", action="quit", description="Quit the app", priority=True),
         Binding(key="c", action="create", description="Create new"),
         Binding(key="delete", action="delete", description="Delete tool"),
-        Binding(key="p", action="copy", description="copy the command")
+        Binding(key="p", action="copy", description="copy the command"),
+        Binding(key="e", action="edit", description="edit the tool")
     ]
 
     def create_tool(self, tool: ToolItem):
         tm.add_tool(tool)
         self.option_list.add_option(Option(tm.get_tool_color(tool), id=tool.id))
-        
+    
+    def edit_tool(self, tool: ToolItem):
+        tm.edit_tool(toolItemId=self.selected_option.option_id, tool=tool)
+        self.option_list.replace_option_prompt_at_index(self.selected_option.option_id-1, tm.get_tool_color(tool))
+        self.query_one(ToolDescriptionScreen).toolItem = tool
 
     def action_create(self):
         self.push_screen("toolModal", self.create_tool)
 
     def action_delete(self):
-        self.push_screen("confirmModal")
-        # tm.delete_tool(toolItemId=self.selected_option.option_id)
-        # self.option_list.remove_option(option_id=self.selected_option.option_id)
+        # self.push_screen("confirmModal")
+        try:
+            tm.delete_tool(toolItemId=self.selected_option.option_id)
+            self.option_list.remove_option(option_id=self.selected_option.option_id)
+        except:
+            pass
+    
+    def action_edit(self):
+        self.push_screen(EditToolScreenModal(tool=tm.get_tool(self.selected_option.option_id), classes="modal"), self.edit_tool)
 
     def action_copy(self):
         toolItem: ToolItem = tm.get_tool(self.selected_option.option_id)
@@ -69,12 +81,13 @@ class ToolShelfApp(App):
 
     def compose(self) -> ComposeResult:
         yield self.option_list
-        yield ToolDescriptionScreen()
+        yield ToolDescriptionScreen(id="description")
         yield Footer()
 
     def on_option_list_option_highlighted(self, option):
         self.selected_option = option
-        self.log(self.query_one(ToolDescriptionScreen).toolItem)
+        # self.log(self.query_one(ToolDescriptionScreen).toolItem)
+        
         self.query_one(ToolDescriptionScreen).toolItem = tm.get_tool(option.option_id)
         
     def on_option_list_option_selected(self, option):
@@ -83,7 +96,6 @@ class ToolShelfApp(App):
             tool: ToolItem = tm.get_tool(option.option_id)
             self.log(tool.name)  
             subprocess.call([tool.command])
-            self.app.exit()
     
 
 

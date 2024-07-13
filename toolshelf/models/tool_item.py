@@ -9,13 +9,11 @@ class ToolItem(Base):
     name = Column(String, nullable=False)
     description = Column(String)
     command = Column(String)
-    installed = Column(Boolean)
 
-    def __init__(self, name: str="", description: str="", command: str="", installed: bool=False):
+    def __init__(self, name: str="", description: str="", command: str=""):
         self.name = name
         self.description = description
         self.command = command
-        self.installed = installed
 
     
 

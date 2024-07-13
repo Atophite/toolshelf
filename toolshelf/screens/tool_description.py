@@ -35,14 +35,21 @@ class ToolDescriptionScreen(Widget):
 
 
     def watch_toolItem(self, toolItem: ToolItem):
-        self.get_widget_by_id(id='name').update(self.toolItem.name)
-        self.get_widget_by_id(id='description').update(self.toolItem.description)
-        self.get_widget_by_id(id="command").update(self.toolItem.command)
 
-        if(tm.get_installed(toolItem)):
-            self.get_widget_by_id(id='installed').update(str("✅"))
+        if(toolItem == None):
+            self.get_widget_by_id(id='name').update("")
+            self.get_widget_by_id(id='description').update("")
+            self.get_widget_by_id(id="command").update("")
+
         else:
-            self.get_widget_by_id(id='installed').update(str("❌"))
+            self.get_widget_by_id(id='name').update(self.toolItem.name)
+            self.get_widget_by_id(id='description').update(self.toolItem.description)
+            self.get_widget_by_id(id="command").update(self.toolItem.command)
+
+            if(tm.get_installed(toolItem)):
+                self.get_widget_by_id(id='installed').update(str("✅"))
+            else:
+                self.get_widget_by_id(id='installed').update(str("❌"))
 
 
 

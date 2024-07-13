@@ -1,5 +1,5 @@
 from toolshelf.models.tool_item import ToolItem
-from sqlalchemy import Column, Integer, String, Boolean, select
+from sqlalchemy import Column, Integer, String, Boolean, select, update
 from toolshelf.database import session
 import subprocess
 
@@ -13,6 +13,18 @@ class ToolManager:
     @staticmethod
     def delete_tool(toolItemId: int) -> None:
         session.delete(ToolManager.get_tool(toolItemId))
+        session.commit()
+
+    @staticmethod
+    def edit_tool(toolItemId: int, tool: ToolItem):
+        session.execute(
+            update(ToolItem).where(ToolItem.id == toolItemId)
+                .values(
+                    name= tool.name,
+                    description = tool.description,
+                    command = tool.command,
+                )
+        )
         session.commit()
     
 
