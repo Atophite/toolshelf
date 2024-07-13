@@ -4,27 +4,40 @@ from textual.containers import Grid
 from textual.binding import Binding
 
 
-class ConfirmScreenModal(ModalScreen):
+class ConfirmScreenModal(ModalScreen[bool]):
 
     BINDINGS = [
         Binding(key="ctrl+q", action="quit", description="Exit screen"),
+        Binding(key="right", action="right", description="right", show=False),
+        Binding(key="left", action="left", description="left", show=False)
 
     ]
 
-    def action_quit(self):
-        self.dismiss()
-
-    def on_option_list_option_highlighted(self, option):
-        pass
+    def action_right(self):
+        self.app.action_focus_next()
         
-    def on_option_list_option_selected(self, option):
-        pass
+    def action_left(self):
+        self.app.action_focus_previous()
+
+    def on_button_pressed(self, event: Button.Pressed):
+        if(event.button.id == "yes"):
+            self.dismiss(True)
+        else:
+            self.dismiss(False)
+
+    def action_quit(self):
+        self.dismiss(False)
 
     def compose(self):
         yield Grid(
                 Label("Are you sure you wanna do this?", id="question"),
-                Button("yes"),
-                Button("no"),
+                Grid(
+                Button("yes", variant="success", id="yes"),
+                Button("no", variant="error", id="no"),
+                classes="button-grid"
+                ),
+
                 id="dialog",
+                
             )
         yield Footer()

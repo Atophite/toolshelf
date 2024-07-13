@@ -7,9 +7,6 @@ Input {
     border: solid orange
 }
 
-Footer {
-    color: blue
-}
 
 #dialog {
     
@@ -26,7 +23,7 @@ Footer {
     content-align: center middle;
 }
 
-#button-grid {
+.button-grid {
     align: center middle;
     grid-size: 2 1;
 
