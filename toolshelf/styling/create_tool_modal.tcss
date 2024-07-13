@@ -4,6 +4,11 @@
 
 Input {
     height: 3;
+    border: solid orange
+}
+
+Footer {
+    color: blue
 }
 
 #dialog {
@@ -11,7 +16,7 @@ Input {
     grid-rows: 4;
     width: 55;
     height: 20;
-    border: thick $background 80%;
+    border: ascii orange 80%;
     background: $surface;
 }
 

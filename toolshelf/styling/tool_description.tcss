@@ -5,3 +5,7 @@
 .tooldescription {
     margin: 0 0 1 0
 }
+
+#description {
+    max-height: 15
+}

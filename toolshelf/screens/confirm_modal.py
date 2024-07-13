@@ -1,5 +1,5 @@
 from textual.screen import ModalScreen, Screen
-from textual.widgets import Label, Footer, OptionList
+from textual.widgets import Label, Footer, OptionList, Button
 from textual.containers import Grid
 from textual.binding import Binding
 
@@ -23,10 +23,8 @@ class ConfirmScreenModal(ModalScreen):
     def compose(self):
         yield Grid(
                 Label("Are you sure you wanna do this?", id="question"),
-                OptionList(
-                    "Yes",
-                    "No",
-                ),
+                Button("yes"),
+                Button("no"),
                 id="dialog",
             )
         yield Footer()

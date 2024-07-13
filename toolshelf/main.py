@@ -29,11 +29,10 @@ class ToolShelfApp(App):
 
     selected_option: Option = None
 
-    option_list = OptionList(*[Option(tm.get_tool_color(tool), id=tool.id) for tool in tm.get_tools()], id="sidebar")
+    option_list = OptionList(*[Option(tm.get_tool_color(tool), id=tool.id) for tool in tm.get_tools()], classes="sidebar")
 
     SCREENS = {
         "toolModal": lambda: ToolScreenModal(classes="modal"),
-        "editToolModal": lambda: EditToolScreenModal(tool=tm.get_tool(selected_option)),
         "confirmModal": lambda: ConfirmScreenModal(classes="modal")
     }
 
@@ -45,11 +44,12 @@ class ToolShelfApp(App):
     ]
 
     BINDINGS = [
-        Binding(key="q", action="quit", description="Quit the app", priority=True),
-        Binding(key="c", action="create", description="Create new"),
-        Binding(key="delete", action="delete", description="Delete tool"),
-        Binding(key="p", action="copy", description="copy the command"),
-        Binding(key="e", action="edit", description="edit the tool")
+        Binding(key="q", action="quit", description="Quit", priority=True),
+        Binding(key="c", action="create", description="Create"),
+        Binding(key="delete", action="delete", description="Delete"),
+        Binding(key="p", action="copy", description="Copy"),
+        Binding(key="e", action="edit", description="Edit"),
+        Binding(key="l", action="focus", description="Change panel")
     ]
 
     def create_tool(self, tool: ToolItem):
@@ -58,17 +58,20 @@ class ToolShelfApp(App):
     
     def edit_tool(self, tool: ToolItem):
         tm.edit_tool(toolItemId=self.selected_option.option_id, tool=tool)
-        self.option_list.replace_option_prompt_at_index(self.selected_option.option_id-1, tm.get_tool_color(tool))
+        self.option_list.replace_option_prompt(self.selected_option.option_id, tm.get_tool_color(tool))
         self.query_one(ToolDescriptionScreen).toolItem = tool
+
+    def action_focus(self):
+        self.app.action_focus_next()
 
     def action_create(self):
         self.push_screen("toolModal", self.create_tool)
 
     def action_delete(self):
-        # self.push_screen("confirmModal")
         try:
-            tm.delete_tool(toolItemId=self.selected_option.option_id)
-            self.option_list.remove_option(option_id=self.selected_option.option_id)
+            self.push_screen("confirmModal")
+            # tm.delete_tool(toolItemId=self.selected_option.option_id)
+            # self.option_list.remove_option(option_id=self.selected_option.option_id)
         except:
             pass
     
@@ -88,6 +91,7 @@ class ToolShelfApp(App):
         self.selected_option = option
         # self.log(self.query_one(ToolDescriptionScreen).toolItem)
         
+        self.log(tm.get_tool(option.option_id))
         self.query_one(ToolDescriptionScreen).toolItem = tm.get_tool(option.option_id)
         
     def on_option_list_option_selected(self, option):

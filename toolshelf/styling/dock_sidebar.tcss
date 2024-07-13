@@ -1,7 +1,11 @@
-#sidebar {
+.sidebar {
     dock: left;
     width: 35;
     height: 100%;
+    border: ascii orange;
 }
 
+Footer {
+    color: blue
+}
 

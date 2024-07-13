@@ -7,10 +7,11 @@ from textual.reactive import reactive
 from rich.table import Table
 from toolshelf.widgets import ToolDescLabelWidget
 from toolshelf.managers.tool_manager import ToolManager as tm
+from textual.containers import ScrollableContainer
 
 
 
-class ToolDescriptionScreen(Widget):
+class ToolDescriptionScreen(ScrollableContainer):
 
     toolItem: ToolItem = reactive(ToolItem())
     # text_area = TextArea.code_editor(toolItem.name, language="markdown", read_only=True, show_line_numbers=False)
@@ -24,7 +25,7 @@ class ToolDescriptionScreen(Widget):
         yield Label("", id='name', classes="tooldescription")
 
         yield Label("description:", classes="tooltype")
-        yield Label("", id="description", classes="tooldescription")
+        yield TextArea("empty...", id="description", read_only=True, disabled=True)
 
         yield Label("command:", classes="tooltype")
         yield Label("", id="command", classes="tooldescription")
@@ -34,22 +35,19 @@ class ToolDescriptionScreen(Widget):
 
 
 
+
     def watch_toolItem(self, toolItem: ToolItem):
-
-        if(toolItem == None):
-            self.get_widget_by_id(id='name').update("")
-            self.get_widget_by_id(id='description').update("")
-            self.get_widget_by_id(id="command").update("")
-
+        self.get_widget_by_id(id='name').update(self.toolItem.name)
+        if(self.toolItem.description is not ""):
+            self.get_widget_by_id(id='description').text = self.toolItem.description
         else:
-            self.get_widget_by_id(id='name').update(self.toolItem.name)
-            self.get_widget_by_id(id='description').update(self.toolItem.description)
-            self.get_widget_by_id(id="command").update(self.toolItem.command)
+            self.get_widget_by_id(id='description').text = "empty"
+        self.get_widget_by_id(id="command").update(self.toolItem.command)
 
-            if(tm.get_installed(toolItem)):
-                self.get_widget_by_id(id='installed').update(str("✅"))
-            else:
-                self.get_widget_by_id(id='installed').update(str("❌"))
+        if(tm.get_installed(toolItem)):
+            self.get_widget_by_id(id='installed').update(str("✅"))
+        else:
+            self.get_widget_by_id(id='installed').update(str("❌"))
 
 
 

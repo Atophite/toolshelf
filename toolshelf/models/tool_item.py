@@ -17,9 +17,6 @@ class ToolItem(Base):
 
     
 
-
-
-
 # Create the table in the database
 Base.metadata.create_all(engine)
 
