@@ -1,24 +1,29 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.1' 
-DESCRIPTION = 'My first Python package'
-LONG_DESCRIPTION = 'My first Python package with a slightly longer description'
+# read the contents of your README file
+from pathlib import Path
+this_directory = Path(__file__).parent
+
+VERSION = '0.0.5' 
+DESCRIPTION = 'A versatile tool management utility for developers'
+LONG_DESCRIPTION = (this_directory / "README.md").read_text()
 
 # Setting up
 setup(
     name="toolshelf", 
     version=VERSION,
     author="Atophite",
-    author_email="<youremail@email.com>",
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type='text/markdown',
+    url="https://github.com/Atophite/toolshelf",
     packages=find_packages(),
     install_requires=["textual", "rich", "sqlalchemy", "pyperclip"], 
     include_package_data=True,
     package_data={
         "toolshelf": ["styling/*.tcss"],
     },
-    keywords=['python', 'first package'],
+    keywords=['python', 'command-line', 'tool', 'TUI', 'Terminal User Interface'],
     classifiers= [
         "Programming Language :: Python :: 3",
     ],

@@ -12,7 +12,7 @@ There are many package managers like npm, pip, apt, brew, and cargo that help yo
 Tool Management: Quickly add new tools, list all your tools, update existing ones, or remove tools you no longer need.
 
   - Tool Management: Quickly add new tools, list all your tools, update existing ones, or   remove tools you no longer need.
- - Data Persistence: Stores all tool data in a human-readable YAML file
+ - Data Persistence: Stores all tool data in a SQLite Database.
    located in your home directory under ~/.local/share/toolshelf, ensuring
    that your tool information is always saved and easily retrievable.
  - Easy Installation and Usage: Simple to install via pip and easy to
@@ -28,6 +28,12 @@ Tool Management: Quickly add new tools, list all your tools, update existing one
   - P to copy the command.
 
 ![alt text](static/example.gif)
+
+## How to install
+pip install toolshelf
+
+## How to build
+Use the build.sh script to build locally.
 
 
 
