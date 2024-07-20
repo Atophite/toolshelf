@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-# read the contents of your README file
+# read the contents of README file
 from pathlib import Path
 this_directory = Path(__file__).parent
 
@@ -10,7 +10,7 @@ LONG_DESCRIPTION = (this_directory / "README.md").read_text()
 
 # Setting up
 setup(
-    name="toolshelf", 
+    name="toolshelf-ui", 
     version=VERSION,
     author="Atophite",
     description=DESCRIPTION,
@@ -30,7 +30,7 @@ setup(
     py_modules=["toolshelf"],
     entry_points={
         'console_scripts': [
-            'toolshelf=toolshelf.entry_points.toolshelf_runner:run_toolshelf',  # 'toolshelf' is the command, and 'main' is the function to execute
+            'toolshelf=toolshelf.entry_points.toolshelf_runner:run_toolshelf',
         ],
     }
 

@@ -7,6 +7,8 @@ from textual.binding import Binding
 from textual.logging import TextualHandler
 from textual import events
 from rich.table import Table
+
+from toolshelf.exceptions import InvalidToolException
 from toolshelf.models.tool_item import ToolItem
 from toolshelf.database import session
 from toolshelf.screens import ToolScreenModal, ToolDescriptionScreen, ConfirmScreenModal, EditToolScreenModal
@@ -70,8 +72,12 @@ class ToolShelfApp(App):
 
     #--------------------------METHODS----------------------------------------
     def create_tool(self, tool: ToolItem):
-        tm.add_tool(tool)
-        self.option_list.add_option(Option(tm.get_tool_color(tool), id=tool.id))
+        try:
+            tm.add_tool(tool)
+            self.option_list.add_option(Option(tm.get_tool_color(tool), id=tool.id))
+        except InvalidToolException as e:
+            self.notify("Invalid tool!", severity="error")
+            
     
     def edit_tool(self, tool: ToolItem):
         tm.edit_tool(toolItemId=self.selected_option.option_id, tool=tool)

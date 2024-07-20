@@ -1,3 +1,4 @@
+from toolshelf.exceptions import InvalidToolException
 from toolshelf.models.tool_item import ToolItem
 from sqlalchemy import Column, Integer, String, Boolean, select, update
 from toolshelf.database import session
@@ -6,9 +7,13 @@ import subprocess
 class ToolManager:
     @staticmethod
     def add_tool(toolItem: "ToolItem"):
-        new_tool = toolItem
-        session.add(new_tool)
-        session.commit()
+
+        if len(toolItem.name) >= 1:
+            session.add(toolItem)
+            session.commit()
+        else:
+            raise InvalidToolException("Tool name can't be empty!")
+
 
     @staticmethod
     def delete_tool(toolItemId: int) -> None:
@@ -30,7 +35,10 @@ class ToolManager:
 
     @staticmethod
     def get_tools():
-        return session.query(ToolItem).all()
+        toolItems = session.query(ToolItem).all()
+
+        toolItems_sorted = sorted(toolItems, key=lambda x: x.name, reverse=False)
+        return toolItems_sorted
     
 
     @staticmethod
