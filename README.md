@@ -30,7 +30,7 @@ Tool Management: Quickly add new tools, list all your tools, update existing one
 ![alt text](static/example.gif)
 
 ## How to install
-pip install toolshelf
+pip install toolshelf-ui
 
 ## How to build
 Use the build.sh script to build locally.
