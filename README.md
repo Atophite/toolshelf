@@ -4,6 +4,9 @@ ToolShelf simplifies the management of tool-related information, providing a sin
 
 In essence, ToolShelf is like a digital toolbox for your terminal tools, helping you keep everything organized and easily accessible, so you can focus on your work without worrying about tool management.
 
+## Compatibility
+!! Currently only works for Linux or WSL !!
+
 ## Integration with Other Package Managers
 
 There are many package managers like npm, pip, apt, brew, and cargo that help you manage libraries and packages for different programming languages and systems. ToolShelf complements these package managers by providing a unified way to manage all your tools, regardless of their installation method.
